@@ -24,26 +24,37 @@ export default defineComponent({
   setup(props, context) {
     const turnstileBox = ref(null)
     onMounted(() => {
-      if (window.turnstile === null || !window.turnstile) {
+      console.debug("Turnstile component mounted.")
+
+      if (window.turnstile === undefined) {
+        console.debug("Turnstile doesn't exist on window.")
+
         const script = document.createElement('script')
         script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback'
         script.async = true
         script.defer = true
         document.head.appendChild(script)
+
+        window.onloadTurnstileCallback = () => {
+          renderTurnstile()
+        }
+
+        return;
       }
+
       renderTurnstile()
     })
 
     function renderTurnstile() {
-      window.onloadTurnstileCallback = () => {
-        window.turnstile?.render("#turnstile-box", {
-          sitekey: props.sitekey,
-          callback: (response: string) => context.emit('verify', response),
-          'expired-callback': context.emit('expire'),
-          'error-callback': context.emit('fail'),
-          ...props.options
-        })
-      }
+      console.debug("Turnstile rendering...")
+
+      window.turnstile?.render("#turnstile-box", {
+        sitekey: props.sitekey,
+        callback: (response: string) => context.emit('verify', response),
+        'expired-callback': context.emit('expire'),
+        'error-callback': context.emit('fail'),
+        ...props.options
+      })
     }
   }
 
