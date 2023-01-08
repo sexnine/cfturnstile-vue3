@@ -1,5 +1,5 @@
 {
-  "name": "cfturnstile-vue3",
+  "name": "@sexnine/cfturnstile-vue3",
   "version": "1.0.0",
   "main": "./dist/cfturnstile-vue3.umd.js",
   "scripts": {

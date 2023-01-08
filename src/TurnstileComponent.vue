@@ -7,6 +7,10 @@ export default defineComponent({
     sitekey: {
       type: String,
       required: true
+    },
+    options: {
+      type: Object,
+      required: false
     }
   },
   emits: {
@@ -36,7 +40,8 @@ export default defineComponent({
           sitekey: props.sitekey,
           callback: (response: string) => context.emit('verify', response),
           'expired-callback': context.emit('expire'),
-          'error-callback': context.emit('fail')
+          'error-callback': context.emit('fail'),
+          ...props.options
         })
       }
     }
